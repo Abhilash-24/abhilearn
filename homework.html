@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Planner - Homework Reminder</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            color: #2d3748;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .input-section {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        label {
+            color: #4a5568;
+            font-weight: 600;
+        }
+
+        input, textarea, select {
+            padding: 0.8rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .reminders-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .reminder-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: fadeIn 0.5s ease;
+            transition: all 0.3s ease;
+            border-left: 5px solid #667eea;
+        }
+
+        .reminder-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .reminder-info {
+            flex: 1;
+        }
+
+        .reminder-title {
+            font-size: 1.2rem;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+
+        .reminder-details {
+            display: flex;
+            gap: 1rem;
+            color: #718096;
+        }
+
+        .priority {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .priority.high { background: #fed7d7; color: #c53030; }
+        .priority.medium { background: #feebc8; color: #c05621; }
+        .priority.low { background: #c6f6d5; color: #22543d; }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #e53e3e;
+            cursor: pointer;
+            padding: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            color: #c53030;
+            transform: scale(1.1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .container { border-radius: 15px; padding: 1.5rem; }
+            .reminder-card { flex-direction: column; align-items: flex-start; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Homework Reminder</h1>
+            <p>Stay organized with your academic tasks</p>
+        </div>
+
+        <div class="input-section">
+            <div class="input-group">
+                <label>Subject</label>
+                <input type="text" id="subject" placeholder="Enter subject name">
+            </div>
+            
+            <div class="input-group">
+                <label>Task Description</label>
+                <textarea id="description" rows="3" placeholder="Enter task details"></textarea>
+            </div>
+
+            <div class="input-group">
+                <label>Due Date</label>
+                <input type="date" id="dueDate">
+            </div>
+
+            <div class="input-group">
+                <label>Priority</label>
+                <select id="priority">
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                </select>
+            </div>
+
+            <button onclick="addReminder()">Add Reminder</button>
+        </div>
+
+        <div class="reminders-list" id="remindersList">
+            <!-- Reminders will be added here dynamically -->
+        </div>
+    </div>
+
+    <script>
+        function addReminder() {
+            const subject = document.getElementById('subject').value;
+            const description = document.getElementById('description').value;
+            const dueDate = document.getElementById('dueDate').value;
+            const priority = document.getElementById('priority').value;
+
+            if (!subject || !dueDate) {
+                alert('Please fill in required fields');
+                return;
+            }
+
+            const reminder = document.createElement('div');
+            reminder.className = 'reminder-card';
+            reminder.innerHTML = `
+                <div class="reminder-info">
+                    <h3 class="reminder-title">${subject}</h3>
+                    <p>${description}</p>
+                    <div class="reminder-details">
+                        <span>📅 ${new Date(dueDate).toLocaleDateString()}</span>
+                        <span class="priority ${priority}">${priority.toUpperCase()}</span>
+                    </div>
+                </div>
+                <button class="delete-btn" onclick="this.parentElement.remove()">✕</button>
+            `;
+
+            document.getElementById('remindersList').appendChild(reminder);
+            
+            // Clear inputs
+            document.getElementById('subject').value = '';
+            document.getElementById('description').value = '';
+            document.getElementById('dueDate').value = '';
+            document.getElementById('priority').value = 'low';
+        }
+    </script>
+</body>
+</html>

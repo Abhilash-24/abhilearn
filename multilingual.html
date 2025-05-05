@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 30px;
+        }
+    
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+    
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 40px;
+            font-size: 2.5em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+    
+        .level-container {
+            margin: 20px 0;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+    
+        .level-container:hover {
+            transform: translateY(-5px);
+        }
+    
+        .level-btn {
+            width: 100%;
+            padding: 20px 30px;
+            font-size: 1.2em;
+            font-weight: 600;
+            text-align: left;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+    
+        .level-btn::after {
+            content: '▼';
+            position: absolute;
+            right: 20px;
+            transition: transform 0.3s ease;
+        }
+    
+        .level-btn.active::after {
+            transform: rotate(180deg);
+        }
+    
+        .class-list {
+            display: none;
+            padding: 15px;
+            background: #f8f9fa;
+            animation: fadeIn 0.3s ease-out;
+        }
+    
+        .class-item {
+            padding: 12px 20px;
+            margin: 8px;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+    
+        .class-item::before {
+            content: '📘';
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+    
+        .class-item:hover {
+            background: #3498db;
+            color: white;
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(52,152,219,0.3);
+        }
+    
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .level-btn {
+                font-size: 1em;
+                padding: 15px 20px;
+            }
+            
+            .class-item {
+                padding: 10px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Educational Materials</h1>
+        <!-- Your existing level containers here -->
+    </div>
+    <div class="level-container">
+        <button class="level-btn">Primary (1-7)</button>
+        <div class="class-list">
+            <div class="class-item" data-pdf="primary/class1.pdf">Class 1</div>
+            <div class="class-item" data-pdf="primary/class2.pdf">Class 2</div>
+            <div class="class-item" data-pdf="primary/class3.pdf">Class 3</div>
+            <div class="class-item" data-pdf="primary/class4.pdf">Class 4</div>
+            <div class="class-item" data-pdf="primary/class5.pdf">Class 5</div>
+            <div class="class-item" data-pdf="primary/class6.pdf">Class 6</div>
+            <div class="class-item" data-pdf="primary/class7.pdf">Class 7</div>
+        </div>
+    </div>
+
+    <div class="level-container">
+        <button class="level-btn">Higher Primary (8-10)</button>
+        <div class="class-list">
+            <div class="class-item" data-pdf="higher-primary/class8.pdf">Class 8</div>
+            <div class="class-item" data-pdf="higher-primary/class9.pdf">Class 9</div>
+            <div class="class-item" data-pdf="higher-primary/class10.pdf">Class 10</div>
+        </div>
+    </div>
+
+    <div class="level-container">
+        <button class="level-btn">PUC (11-12)</button>
+        <div class="class-list">
+            <div class="class-item" data-pdf="puc/class11.pdf">Class 11</div>
+            <div class="class-item" data-pdf="puc/class12.pdf">Class 12</div>
+        </div>
+    </div>
+
+    <div class="level-container">
+        <button class="level-btn">Degree</button>
+        <div class="class-list">
+            <div class="class-item" data-pdf="degree/first-year.pdf">First Year</div>
+            <div class="class-item" data-pdf="degree/second-year.pdf">Second Year</div>
+            <div class="class-item" data-pdf="degree/third-year.pdf">Third Year</div>
+            <div class="class-item" data-pdf="degree/fourth-year.pdf">Fourth Year</div>
+        </div>
+    </div>
+
+    <script>
+        // Handle level buttons
+        document.querySelectorAll('.level-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const classList = this.nextElementSibling;
+                document.querySelectorAll('.class-list').forEach(list => {
+                    if (list !== classList) list.style.display = 'none';
+                });
+                classList.style.display = classList.style.display === 'block' ? 'none' : 'block';
+            });
+        });
+
+        // Handle class items
+        document.querySelectorAll('.class-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const pdfPath = this.dataset.pdf;
+                if(pdfPath) {
+                    window.open(pdfPath, '_blank'); // Open PDF in new tab
+                }
+            });
+        });
+
+        // Close all when clicking outside
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.class-list').forEach(list => {
+                list.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>

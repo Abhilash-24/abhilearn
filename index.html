@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Video Conferencing App</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Video Conferencing App</h1>
+  </header>
+  <main>
+    <section id="local-video-section">
+      <h2>Your Video</h2>
+      <video id="localVideo" autoplay muted playsinline></video>
+    </section>
+    <section id="remote-videos-section">
+      <h2>Participants</h2>
+      <div id="remoteVideos"></div>
+    </section>
+    <section id="controls">
+      <button id="startCallBtn">Start Call</button>
+      <button id="shareScreenBtn">Share Screen</button>
+      <button id="toggleWhiteboardBtn">Toggle Whiteboard</button>
+      <button id="shareFileBtn">Share File</button>
+      <button id="endCallBtn">End Call</button>
+    </section>
+    <section id="whiteboardSection" hidden>
+      <canvas id="whiteboard"></canvas>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

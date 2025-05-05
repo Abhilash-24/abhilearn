@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Responsive Movable Dashboard</title>
+<style>
+  body, html {
+    margin: 0; padding: 0; height: 100%; font-family: Arial, sans-serif;
+    background: #f5f7fa; color: #333;
+  }
+  .container {
+    display: flex; height: 100vh; overflow: hidden;
+  }
+  .sidebar {
+    width: 250px; background: #2c3e50; color: #ecf0f1;
+    display: flex; flex-direction: column; transition: transform 0.3s ease;
+  }
+  .sidebar-header {
+    padding: 1rem; background: #1a252f; display: flex; justify-content: space-between; align-items: center;
+  }
+  .sidebar-toggle {
+    background: none; border: none; color: #ecf0f1; font-size: 1.5rem; cursor: pointer;
+  }
+  .nav-list {
+    list-style: none; padding: 0; margin: 0; flex-grow: 1;
+  }
+  .nav-list li {
+    padding: 0.75rem 1rem;
+  }
+  .nav-list li:hover {
+    background: #34495e;
+  }
+  .main-content {
+    flex-grow: 1; padding: 1rem; overflow-y: auto;
+    transition: margin-left 0.3s ease;
+  }
+  .sidebar.hidden {
+    transform: translateX(-250px);
+  }
+  .main-content.expanded {
+    margin-left: 0;
+  }
+  .dashboard-container {
+    display: flex; flex-wrap: wrap; gap: 1rem;
+  }
+  .dashboard-widget {
+    background: white; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 1rem; flex: 1 1 300px; cursor: move; user-select: none;
+  }
+  @media (max-width: 768px) {
+    .container {
+      flex-direction: column;
+    }
+    .sidebar {
+      width: 100%; height: auto; transform: translateY(-100%);
+      position: absolute; z-index: 1000;
+    }
+    .sidebar.hidden {
+      transform: translateY(-100%);
+    }
+    .sidebar.visible {
+      transform: translateY(0);
+    }
+    .main-content {
+      margin-left: 0 !important;
+      padding: 1rem;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2>Dashboard</h2>
+      <button class="sidebar-toggle" id="sidebarToggle">&#9776;</button>
+    </div>
+    <ul class="nav-list">
+      <li ><a href="1index.html"><span>Home</span></a></li>
+      <li>Profile</li>
+      <li>Settings</li>
+      <li>Logout</li>
+    </ul>
+  </nav>
+  <main class="main-content" id="mainContent">
+    <div class="dashboard-container" id="dashboardContainer">
+      <div class="dashboard-widget" draggable="true" id="widget1">
+        <h3>Widget 1</h3>
+        <p>Content of widget 1.</p>
+      </div>
+      <div class="dashboard-widget" draggable="true" id="widget2">
+        <h3>Widget 2</h3>
+        <p>Content of widget 2.</p>
+      </div>
+      <div class="dashboard-widget" draggable="true" id="widget3">
+        <h3>Widget 3</h3>
+        <p>Content of widget 3.</p>
+      </div>
+    </div>
+  </main>
+</div>
+<script>
+  const sidebar = document.getElementById('sidebar');
+  const toggleBtn = document.getElementById('sidebarToggle');
+  const mainContent = document.getElementById('mainContent');
+
+  toggleBtn.addEventListener('click', () => {
+    if(window.innerWidth <= 768){
+      if(sidebar.classList.contains('visible')){
+        sidebar.classList.remove('visible');
+      } else {
+        sidebar.classList.add('visible');
+      }
+    } else {
+      sidebar.classList.toggle('hidden');
+      mainContent.classList.toggle('expanded');
+    }
+  });
+
+  // Drag and drop for dashboard widgets
+  const dashboardContainer = document.getElementById('dashboardContainer');
+  let dragged = null;
+
+  dashboardContainer.addEventListener('dragstart', (e) => {
+    dragged = e.target;
+    e.target.style.opacity = 0.5;
+  });
+
+  dashboardContainer.addEventListener('dragend', (e) => {
+    e.target.style.opacity = '';
+    dragged = null;
+  });
+
+  dashboardContainer.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    const afterElement = getDragAfterElement(dashboardContainer, e.clientY);
+    if (afterElement == null) {
+      dashboardContainer.appendChild(dragged);
+    } else {
+      dashboardContainer.insertBefore(dragged, afterElement);
+    }
+  });
+
+  function getDragAfterElement(container, y) {
+    const draggableElements = [...container.querySelectorAll('.dashboard-widget:not(.dragging)')];
+    return draggableElements.reduce((closest, child) => {
+      const box = child.getBoundingClientRect();
+      const offset = y - box.top - box.height / 2;
+      if (offset < 0 && offset > closest.offset) {
+        return { offset: offset, element: child };
+      } else {
+        return closest;
+      }
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
+  }
+</script>
+</body>
+</html>

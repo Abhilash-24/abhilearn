@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" /> 
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LearnSphere - Sidebar Only</title>
+    <link rel="stylesheet" href="style.css"/>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        .sidebar {
+            height: 100vh;
+            width: 100vw;
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .sidebar-header h2 {
+            color: #ecf0f1;
+            margin: 0;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: #ecf0f1;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            text-decoration: none;
+            color: #ecf0f1;
+            font-size: 18px;
+            border-radius: 8px;
+            margin: 4px 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover {
+            background-color: #34495e;
+            transform: translateX(8px);
+        }
+
+        .icon {
+            margin-right: 10px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        select {
+            background-color: #34495e;
+            color: white;
+            border: none;
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        /* Dark Mode Styles */
+        .dark-mode {
+            background-color: #1a1a1a;
+        }
+
+        .dark-mode .nav-item:hover {
+            background-color: #2d2d2d;
+        }
+
+        .dark-mode select {
+            background-color: #2d2d2d;
+        }
+
+        .dark-mode .theme-toggle {
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <nav id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>LearnSphere</h2>
+            <button class="theme-toggle" id="themeToggle">🌙</button>
+        </div>
+        <ul class="nav-list">
+            <!-- Your existing navigation items here -->
+            <li><a href="1chat.html" class="nav-item" title="AI Tutor Bots"><span class="icon">🤖</span><span class="nav-text">AI Tutor Bots</span></a></li>
+            <li><a href="multilingual.html" class="nav-item" title="Multilingual Resources"><span class="icon">🌐</span><span class="nav-text">Multilingual Resources</span></a></li>
+            <li>
+                <label for="language-select" class="nav-item" style="cursor:pointer;">
+                    <span class="icon">🗣️</span>
+                    <span class="nav-text">Language:</span>
+                    <select id="language-select" aria-label="Select Language" style="margin-left: 0.5rem; border-radius: 8px; padding: 0.2rem;">
+                        <option value="en" selected>English</option>
+                        <option value="kan">Kannada</option>
+                        <option value="hi">Hindi</option>
+                    </select>
+                </label>
+            </li>
+            <li><a href="quiz.html" class="nav-item" title="Quizzes & Leaderboards"><span class="icon">📝</span><span class="nav-text">Quizzes</span></a></li>
+            <li><a href="ecommerce.html" class="nav-item" title="ecommerce"><span class="nav-text">E-commerce</span></a></li>
+            <li><a href="homework.html" class="nav-item" title="homework"><span class="nav-text">HomeWork</span></a></li>
+            <li><a href="Video-Conferencing-main/index.html" class="nav-item" title="Video Conferencing">
+                    <i class="icon fas fa-video"></i>
+                    <span class="nav-text">Video Calling</span>
+                </a>
+            </li>
+            <li><a href="https://www.youtube.com" target="_blank" class="nav-item" title="YouTube"><span class="icon"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg" alt="YouTube" style="width:100%; height:250px; vertical-align:middle;"></span><span class="nav-text">YouTube</span></a></li>
+            <li><a href="https://www.google.com" target="_blank" class="nav-item" title="Google"><span class="icon"><img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google" style="width:50px; height:100px; vertical-align:middle;"></span><span class="nav-text">Google</span></a></li>
+        </ul>
+    </nav>
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const sidebar = document.getElementById('sidebar');
+
+        // Check for saved theme in localStorage
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme === 'dark') {
+            sidebar.classList.add('dark-mode');
+            themeToggle.textContent = '☀️';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('dark-mode');
+            
+            if (sidebar.classList.contains('dark-mode')) {
+                themeToggle.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeToggle.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
+            }
+        });
+    </script>
+</body>
+</html>

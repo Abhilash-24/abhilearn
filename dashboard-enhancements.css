@@ -1,0 +1,62 @@
+/* Dashboard and sidebar enhancements */
+
+/* Add transitions for main content area */
+.main-content {
+    transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+/* When sidebar is active (visible), main content margin adjusts */
+.sidebar.active ~ .main-content {
+    margin-left: 0;
+    width: 100%;
+}
+
+/* When sidebar is hidden, main content takes full width */
+.sidebar:not(.active) ~ .main-content {
+    margin-left: 250px;
+    width: calc(100% - 250px);
+}
+
+/* Draggable dashboard widget styles */
+.dashboard-widget {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    cursor: move;
+    user-select: none;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    .sidebar {
+        width: 100%;
+        height: auto;
+        transform: translateY(-100%);
+        position: absolute;
+        z-index: 1000;
+    }
+    .sidebar.active {
+        transform: translateY(0);
+    }
+    .sidebar-toggle {
+        display: block;
+    }
+    .main-content {
+        padding: 1rem;
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+}
+
+/* Make the task list a draggable widget */
+.task-list.dashboard-widget {
+    max-height: 300px;
+    overflow-y: auto;
+    cursor: move;
+    user-select: none;
+}

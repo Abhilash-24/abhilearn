@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Interactive Quiz - LearnSphere</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f6fc;
+      color: #333;
+    }
+
+    .quiz-container {
+      max-width: 800px;
+      margin: 50px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 30px;
+    }
+
+    .quiz-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .quiz-header h2 {
+      font-size: 28px;
+      margin: 0;
+    }
+
+    .question {
+      margin-bottom: 20px;
+      font-size: 20px;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option {
+      background: #f1f1f1;
+      padding: 12px 20px;
+      border-radius: 8px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .option:hover {
+      background-color: #e1eaff;
+    }
+
+    .option.correct {
+      background-color: #d4edda;
+      border-color: #28a745;
+      color: #155724;
+    }
+
+    .option.wrong {
+      background-color: #f8d7da;
+      border-color: #dc3545;
+      color: #721c24;
+    }
+
+    .next-btn {
+      margin-top: 25px;
+      padding: 12px 24px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      display: none;
+    }
+
+    .next-btn:hover {
+      background-color: #0056b3;
+    }
+
+    @media (max-width: 600px) {
+      .quiz-container {
+        padding: 20px;
+      }
+
+      .question {
+        font-size: 18px;
+      }
+
+      .option {
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <div class="quiz-header">
+      <h2>Test Your Knowledge</h2>
+      <p>Choose the correct answer from the options below:</p>
+    </div>
+    <div id="quiz-content">
+      <!-- Question and options go here -->
+    </div>
+    <button class="next-btn" id="next-btn">Next Question</button>
+  </div>
+
+  <script>
+    const questions = [
+  {
+    "question": "Which ancient Indian university was a major center for Buddhist learning?",
+    "options": ["Takshashila", "Vikramashila", "Nalanda", "Valabhi"],
+    "correct": 2
+  },
+  {
+    "question": "Who composed the national anthem of India, 'Jana Gana Mana'?",
+    "options": ["Rabindranath Tagore", "Bankim Chandra Chattopadhyay", "Sarojini Naidu", "Subramania Bharati"],
+    "correct": 0
+  },
+  {
+    "question": "In which Indian state is the traditional dance form 'Kathakali' performed?",
+    "options": ["Tamil Nadu", "Kerala", "Odisha", "Manipur"],
+    "correct": 1
+  },
+  {
+    "question": "Which Indian mathematician introduced the concept of zero?",
+    "options": ["Aryabhata", "Brahmagupta", "Bhaskara II", "Srinivasa Ramanujan"],
+    "correct": 1
+  },
+  {
+    "question": "What is the primary language of the Rigveda?",
+    "options": ["Pali", "Sanskrit", "Prakrit", "Tamil"],
+    "correct": 1
+  },
+  {
+    "question": "Which Indian state celebrates 'Bihu' as its harvest festival?",
+    "options": ["Assam", "Punjab", "Karnataka", "West Bengal"],
+    "correct": 0
+  },
+  {
+    "question": "Who founded the Banaras Hindu University (BHU) in 1916?",
+    "options": ["Swami Vivekananda", "Madan Mohan Malviya", "Jawaharlal Nehru", "Sardar Patel"],
+    "correct": 1
+  },
+  {
+    "question": "The 'Gurukul' system of education is associated with which era?",
+    "options": ["Mughal Era", "British Era", "Vedic Era", "Mauryan Era"],
+    "correct": 2
+  },
+  {
+    "question": "Which Indian classical dance form originated in Tamil Nadu?",
+    "options": ["Kathak", "Bharatanatyam", "Kuchipudi", "Odissi"],
+    "correct": 1
+  },
+  {
+    "question": "The 'Midday Meal Scheme' in India was introduced to address:",
+    "options": ["Teacher Training", "School Infrastructure", "Child Nutrition", "Digital Literacy"],
+    "correct": 2
+  },
+  {
+    "question": "Which Indian state is known for the 'Ratha Yatra' festival?",
+    "options": ["Odisha", "Rajasthan", "Gujarat", "Uttar Pradesh"],
+    "correct": 0
+  },
+  {
+    "question": "Who wrote the epic 'Ramcharitmanas'?",
+    "options": ["Tulsidas", "Kabir", "Surdas", "Mirabai"],
+    "correct": 0
+  },
+  {
+    "question": "The 'Right to Education Act' (RTE) in India was enacted in which year?",
+    "options": ["2002", "2005", "2009", "2012"],
+    "correct": 2
+  },
+  {
+    "question": "Which Indian city hosts the Indian Institute of Science (IISc)?",
+    "options": ["Chennai", "Mumbai", "Bengaluru", "Hyderabad"],
+    "correct": 2
+  },
+  {
+    "question": "The 'Navodaya Vidyalaya' system was established to promote:",
+    "options": ["Technical Education", "Rural Talent", "Sports Training", "Girls' Education"],
+    "correct": 1
+  },
+  {
+    "question": "Which Indian festival marks the birth of Lord Krishna?",
+    "options": ["Diwali", "Holi", "Janmashtami", "Raksha Bandhan"],
+    "correct": 2
+  },
+  {
+    "question": "Who was the first female teacher in India?",
+    "options": ["Anandi Gopal Joshi", "Sarojini Naidu", "Savitribai Phule", "Indira Gandhi"],
+    "correct": 2
+  },
+  {
+    "question": "Which Indian state is the birthplace of Guru Nanak Dev?",
+    "options": ["Punjab", "Haryana", "Uttar Pradesh", "Bihar"],
+    "correct": 0
+  },
+  {
+    "question": "The 'Three Language Formula' in Indian education emphasizes learning:",
+    "options": ["Hindi, English, Sanskrit", "Hindi, English, Regional Language", "Sanskrit, Tamil, Urdu", "English, French, German"],
+    "correct": 1
+  },
+  {
+    "question": "Which ancient text is considered the foundation of Ayurveda?",
+    "options": ["Charaka Samhita", "Arthashastra", "Natya Shastra", "Yajurveda"],
+    "correct": 0
+  },
+  {
+    "question": "The 'Kumbh Mela' is held in how many cities cyclically?",
+    "options": ["2", "3", "4", "5"],
+    "correct": 2
+  }
+];
+
+    let currentQuestion = 0;
+
+    const quizContent = document.getElementById('quiz-content');
+    const nextBtn = document.getElementById('next-btn');
+
+    function loadQuestion() {
+      const q = questions[currentQuestion];
+      quizContent.innerHTML = `
+        <div class="question">${q.question}</div>
+        <div class="options">
+          ${q.options.map((opt, index) => `
+            <div class="option" data-index="${index}">${opt}</div>
+          `).join('')}
+        </div>
+      `;
+      nextBtn.style.display = 'none';
+
+      document.querySelectorAll('.option').forEach(option => {
+        option.addEventListener('click', handleOptionClick);
+      });
+    }
+
+    function handleOptionClick(e) {
+      const selected = parseInt(e.target.dataset.index);
+      const correct = questions[currentQuestion].correct;
+
+      document.querySelectorAll('.option').forEach(option => {
+        const index = parseInt(option.dataset.index);
+        option.classList.add(index === correct ? 'correct' : 'wrong');
+        option.style.pointerEvents = 'none';
+      });
+
+      nextBtn.style.display = 'inline-block';
+    }
+
+    nextBtn.addEventListener('click', () => {
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        loadQuestion();
+      } else {
+        quizContent.innerHTML = `
+          <div class="question">🎉 Quiz Completed!</div>
+          <p>Great job! Refresh the page to try again.</p>
+        `;
+        nextBtn.style.display = 'none';
+      }
+    });
+
+    // Load first question on page load
+    loadQuestion();
+  </script>
+</body>
+</html>

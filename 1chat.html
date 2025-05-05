@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnSphere - AI Tutor</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .chat-page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .chat-container {
+            background: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            height: 85vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            padding: 20px;
+            border-bottom: 2px solid #eee;
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+        }
+
+        .chat-header h1 {
+            margin: 0;
+            font-size: 26px;
+        }
+
+        .chat-header p {
+            margin-top: 5px;
+            font-size: 16px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #f9fafb;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 75%;
+            padding: 12px 18px;
+            border-radius: 20px;
+            animation: fadeIn 0.3s ease-in;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .user-message {
+            background: #007bff;
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 0;
+        }
+
+        .bot-message {
+            background: #e2e8f0;
+            color: #202124;
+            margin-right: auto;
+            border-bottom-left-radius: 0;
+        }
+
+        .chat-input-container {
+            padding: 20px;
+            border-top: 1px solid #eee;
+            background: #ffffff;
+        }
+
+        .chat-form {
+            display: flex;
+            gap: 10px;
+        }
+
+        #chat-input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 1px solid #ccc;
+            border-radius: 25px;
+            font-size: 16px;
+        }
+
+        .primary-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .primary-btn:hover {
+            background: #0056b3;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .chat-page {
+                padding: 10px;
+            }
+            .message {
+                max-width: 90%;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-page">
+        <div class="chat-container">
+            <div class="chat-header">
+                <h1>LearnSphere - AI Tutor</h1>
+                <p>Empowering your curiosity — from algebra to ancient cultures!</p>
+            </div>
+            
+            <div class="chat-messages" id="chat-messages">
+                <div class="message bot-message">
+                    🌍 Welcome! I’m your AI Tutor — ask me about school subjects, cultural traditions, famous historical events, or scientific facts!
+                </div>
+            </div>
+            
+            <div class="chat-input-container">
+                <form class="chat-form" id="chat-form">
+                    <input type="text" id="chat-input" 
+                        placeholder="Type your question here..." 
+                        autocomplete="off"
+                        required>
+                    <button type="submit" class="primary-btn">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const chatForm = document.getElementById('chat-form');
+        const chatInput = document.getElementById('chat-input');
+        const chatMessages = document.getElementById('chat-messages');
+
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const question = chatInput.value.trim();
+
+            if (question) {
+                addMessage(question, 'user');
+                chatInput.value = '';
+
+                const loadingMsg = addMessage('🧠 Thinking...', 'bot');
+
+                setTimeout(() => {
+                    loadingMsg.remove();
+                    const response = generateResponse(question);
+                    addMessage(response, 'bot');
+                }, 1500);
+            }
+        });
+
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', `${sender}-message`);
+            messageDiv.textContent = text;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            return messageDiv;
+        }
+
+        function generateResponse(question) {
+            const q = question.toLowerCase();
+            if (q.includes('math')) {
+                return "📐 Here's how to solve that math problem: Identify known values, apply formulas, and double-check your units.";
+            }
+            if (q.includes('science')) {
+                return "🔬 Science teaches us about the world — this topic involves energy transformation, biological processes, or the laws of physics!";
+            }
+            if (q.includes('history')) {
+                return "📚 This historical topic reflects a significant time — let's explore what happened, why, and its impact.";
+            }
+            if (q.includes('culture') || q.includes('tradition')) {
+                return "🎎 Different cultures have unique values, traditions, and festivals. For example, Diwali is a major Hindu festival celebrating light over darkness.";
+            }
+            if (q.includes('language')) {
+                return "🗣️ Learning new languages opens doors to understanding people and cultures. Spanish, for example, is spoken in over 20 countries!";
+            }
+            if (q.includes('hello') || q.includes('hi')) {
+                return "👋 Hello! Ready to learn something new today?";
+            }
+
+            return "🤔 I'm still learning! Try rephrasing or asking about a subject like science, math, language, culture, or history.";
+        }
+    </script>
+</body>
+</html>
